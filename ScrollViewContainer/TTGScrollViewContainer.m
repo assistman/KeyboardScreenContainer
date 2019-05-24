@@ -7,6 +7,10 @@
 #import "TTGScrollViewContainer.h"
 #import "ContentViewController.h"
 
+static CGFloat const TTGTopTextFieldGap = 16.0;
+static CGFloat const TTGBottomTextFieldGap = 16.0;
+static CGFloat const TTGAccessoryToolbarHeight = 50.0;
+
 @interface TTGScrollViewContainer ()
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *scrollContainerConstraint;
@@ -45,8 +49,8 @@
 }
 
 - (void)setupScrollView {
-    // This is needed to have a small gap when keyboard appears and scrolls text field to visible
-    self.mainScrollView.contentInset = UIEdgeInsetsMake(16.0, 0, 16.0, 0);
+    // This is needed to have a small gaps when keyboard appears and scrolls text field to visible
+    self.mainScrollView.contentInset = UIEdgeInsetsMake(TTGTopTextFieldGap, 0, TTGBottomTextFieldGap, 0);
 }
 
 - (void)setupChildVC {
@@ -77,7 +81,7 @@
     [childController removeFromParentViewController];
 }
 
-#pragma mark - Keyboard Accessory View (UIToolBar with Next, Previous by default)
+#pragma mark - Keyboard Accessory View (UIToolBar with Next, Previous buttons)
 
 - (void)setupTextFieldsToolbarAccessory:(NSArray *)fields {
     UIView *toolbarView = [self createToolbar];
@@ -89,9 +93,12 @@
 
 - (UIToolbar *)createToolbar {
     CGFloat width = CGRectGetWidth(UIScreen.mainScreen.bounds);
-    UIToolbar *toolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, width, 50)];
+    UIToolbar *toolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, width, TTGAccessoryToolbarHeight)];
     toolbar.barStyle = UIBarStyleBlackTranslucent;
-    UIBarButtonItem *space = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *space = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                          target:nil
+                                                                          action:nil];
+    // TODO: localized
     UIBarButtonItem *previous = [[UIBarButtonItem alloc]initWithTitle:@"Previous"
                                                             style:UIBarButtonItemStyleDone
                                                            target:self
@@ -133,10 +140,12 @@
 
 - (void)activateField:(UITextField *)textField {
     self.currentField = textField;
+    [textField becomeFirstResponder];
 }
 
 - (void)deactivateField:(UITextField *)textField {
     self.currentField = nil;
+    [textField resignFirstResponder];
 }
 
 #pragma mark - Keyboard Notifications
@@ -170,7 +179,6 @@
     } completion:nil];
 }
 
-// wkeyboard notes ?
 - (void)keyboardDidAppear:(NSNotification *)notification {
     [self.mainScrollView scrollRectToVisible:self.currentField.frame animated:YES];
 }
@@ -185,13 +193,14 @@
     [self.currentField resignFirstResponder];
 }
 
-
-// TODO: Delegate or completion
 - (IBAction)close:(id)sender {
-    [self.currentField resignFirstResponder];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissWithCompletion:nil];
 }
 
+- (void)dismissWithCompletion:(void(^)(void))completion {
+    [self.currentField resignFirstResponder];
+    [self dismissViewControllerAnimated:YES completion:completion];
+}
 
 // TODO: User category
 - (void)stretchToSuperviewEdges:(UIView *)view {

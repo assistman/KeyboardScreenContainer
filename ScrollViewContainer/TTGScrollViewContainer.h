@@ -6,10 +6,16 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol TTGTextFieldResizableContainer <NSObject>
+@interface TTGScrollViewContainer : UIViewController
 
-@optional
-// Pass text fields which should contain UIToolBar with 'Next' and 'Previous' buttons
+// Do not change any layout, only for appearance UI adjustments.
+@property (strong, nonatomic) IBOutlet UIView *mainContainer;
+@property (strong, nonatomic) IBOutlet UIScrollView *mainScrollView;
+
+// Designated setup method
+- (void)setupWithContentController:(UIViewController *)contentVC;
+
+// Add navigation accessory view (multiple fields on screen case)
 - (void)setupTextFieldsToolbarAccessory:(NSArray *)fields;
 
 // Call this method when field begins editing
@@ -17,12 +23,8 @@
 
 // Call this method when field ends editing
 - (void)deactivateField:(UITextField *)textField;
-@end
 
-@interface TTGScrollViewContainer : UIViewController <TTGTextFieldResizableContainer>
-
-// Do not change any layout, only for appearance UI adjustments.
-@property (strong, nonatomic) IBOutlet UIView *mainContainer;
-@property (strong, nonatomic) IBOutlet UIScrollView *mainScrollView;
+// Call to do dismiss container with completion block
+- (void)dismissWithCompletion:(void(^)(void))completion;
 
 @end

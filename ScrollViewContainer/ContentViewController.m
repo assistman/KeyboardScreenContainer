@@ -31,9 +31,12 @@
     [self.parentContainer deactivateField:textField];
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    return YES;
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [self.parentContainer setupTextFieldsToolbarAccessory:@[self.field1, self.field2, self.field3, self.field4, self.field5, self.field6, self.field7, self.field8]];
-    
 }
 
 @end

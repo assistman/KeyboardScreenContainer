@@ -12,6 +12,5 @@
 @property (strong, nonatomic) TTGScrollViewContainer *containerVC;
 - (void)openScrollViewContainer;
 
-
 @end
 
