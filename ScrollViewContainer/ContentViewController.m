@@ -5,39 +5,13 @@
 //
 
 #import "ContentViewController.h"
-#import "AppDelegate.h"
-#import "ViewController.h"
-
-@interface ContentViewController ()
-
-@property (strong, nonatomic) IBOutlet UITextField *field1;
-@property (strong, nonatomic) IBOutlet UITextField *field2;
-@property (strong, nonatomic) IBOutlet UITextField *field3;
-@property (strong, nonatomic) IBOutlet UITextField *field4;
-@property (strong, nonatomic) IBOutlet UITextField *field5;
-@property (strong, nonatomic) IBOutlet UITextField *field6;
-@property (strong, nonatomic) IBOutlet UITextField *field7;
-@property (strong, nonatomic) IBOutlet UITextField *field8;
-
-@end
 
 @implementation ContentViewController
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    [self.parentContainer activateField:textField];
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    [self.parentContainer deactivateField:textField];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self.parentContainer deactivateField:textField];
-    return YES;
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [self.parentContainer setupTextFieldsToolbarAccessory:@[self.field1, self.field2, self.field3, self.field4, self.field5, self.field6, self.field7, self.field8]];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.allTextFields = @[self.field1, self.field2, self.field3, self.field4, self.field5, self.field6, self.field7, self.field8];
 }
 
 @end

@@ -140,9 +140,6 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="done"/>
-                                <connections>
-                                    <outlet property="delegate" destination="BuY-8g-dpm" id="BVa-11-Rbh"/>
-                                </connections>
                             </textField>
                             <textField opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qeX-QI-noO">
                                 <rect key="frame" x="117" y="174" width="180" height="30"/>
@@ -152,9 +149,6 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="done"/>
-                                <connections>
-                                    <outlet property="delegate" destination="BuY-8g-dpm" id="Srf-cq-QsD"/>
-                                </connections>
                             </textField>
                             <textField opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eey-Kr-mca">
                                 <rect key="frame" x="97" y="284" width="220" height="30"/>
@@ -164,9 +158,6 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="done"/>
-                                <connections>
-                                    <outlet property="delegate" destination="BuY-8g-dpm" id="MB0-FT-66c"/>
-                                </connections>
                             </textField>
                             <textField opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="D0u-rb-JLj">
                                 <rect key="frame" x="97" y="394" width="220" height="30"/>
@@ -176,9 +167,6 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="done"/>
-                                <connections>
-                                    <outlet property="delegate" destination="BuY-8g-dpm" id="A4w-3z-2Py"/>
-                                </connections>
                             </textField>
                             <textField opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Lcu-na-JSD">
                                 <rect key="frame" x="97" y="504" width="220" height="30"/>
@@ -188,9 +176,6 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="done"/>
-                                <connections>
-                                    <outlet property="delegate" destination="BuY-8g-dpm" id="ySJ-IK-jEt"/>
-                                </connections>
                             </textField>
                             <textField opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bBV-h7-Bhj">
                                 <rect key="frame" x="97" y="609" width="220" height="30"/>
@@ -200,9 +185,6 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="done"/>
-                                <connections>
-                                    <outlet property="delegate" destination="BuY-8g-dpm" id="ba5-2l-4LX"/>
-                                </connections>
                             </textField>
                             <textField opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="loC-CX-12S">
                                 <rect key="frame" x="157" y="721" width="100" height="30"/>
@@ -212,9 +194,6 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="done"/>
-                                <connections>
-                                    <outlet property="delegate" destination="BuY-8g-dpm" id="xLH-jU-7Lu"/>
-                                </connections>
                             </textField>
                             <textField opaque="NO" tag="8" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Xru-0j-eVO">
                                 <rect key="frame" x="157" y="796" width="100" height="30"/>
@@ -224,9 +203,6 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="done"/>
-                                <connections>
-                                    <outlet property="delegate" destination="BuY-8g-dpm" id="9I1-vi-vuY"/>
-                                </connections>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.18039215689999999" green="0.52549019610000003" blue="0.6705882353" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -272,6 +248,7 @@
                         <outlet property="field6" destination="bBV-h7-Bhj" id="ANk-QS-Mtq"/>
                         <outlet property="field7" destination="loC-CX-12S" id="rO1-3d-KXw"/>
                         <outlet property="field8" destination="Xru-0j-eVO" id="u9C-lu-hFP"/>
+                        <outletCollection property="allFields" destination="D0u-rb-JLj" id="Mbw-rY-8IX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R1k-fQ-wNX" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -6,25 +6,31 @@
 
 #import <UIKit/UIKit.h>
 
+@class TTGScrollViewContainer;
+
+@protocol TTGKeyboardContainerEmbedable <NSObject>
+
+@property (copy, nonatomic) NSArray *allTextFields;
+
+@optional
+- (BOOL)container:(TTGScrollViewContainer *)container textFieldShouldClear:(UITextField *)textField;
+- (BOOL)container:(TTGScrollViewContainer *)container textFieldShouldReturn:(UITextField *)textField;
+- (BOOL)container:(TTGScrollViewContainer *)container textFieldShouldBeginEditing:(UITextField *)textField;
+- (void)container:(TTGScrollViewContainer *)container textFieldDidBeginEditing:(UITextField *)textField;
+- (BOOL)container:(TTGScrollViewContainer *)container textFieldShouldEndEditing:(UITextField *)textField;
+- (void)container:(TTGScrollViewContainer *)container textFieldDidEndEditing:(UITextField *)textField;
+- (void)container:(TTGScrollViewContainer *)container textFieldDidEndEditing:(UITextField *)textField reason:(UITextFieldDidEndEditingReason)reason;
+- (BOOL)container:(TTGScrollViewContainer *)container textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
+@end
+
 @interface TTGScrollViewContainer : UIViewController
 
-// Do not change any layout, only for appearance UI adjustments.
-@property (strong, nonatomic) IBOutlet UIView *mainContainer;
-@property (strong, nonatomic) IBOutlet UIScrollView *mainScrollView;
-
 // Designated setup method
-- (void)setupWithContentController:(UIViewController *)contentVC;
+- (void)setupWithContentVC:(UIViewController <TTGKeyboardContainerEmbedable>*)contentVC
+                    fields:(NSArray <UITextField *>*)fields
+            toolbarEnabled:(BOOL)toolbarEnabled;
 
-// Add navigation accessory view (multiple fields on screen case)
-- (void)setupTextFieldsToolbarAccessory:(NSArray *)fields;
-
-// Call this method when field begins editing
-- (void)activateField:(UITextField *)textField;
-
-// Call this method when field ends editing
-- (void)deactivateField:(UITextField *)textField;
-
-// Call to do dismiss container with completion block
+// Container dismissal
 - (void)dismissWithCompletion:(void(^)(void))completion;
 
 @end

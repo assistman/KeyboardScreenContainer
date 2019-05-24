@@ -11,15 +11,20 @@ static CGFloat const TTGTopTextFieldGap = 16.0;
 static CGFloat const TTGBottomTextFieldGap = 16.0;
 static CGFloat const TTGAccessoryToolbarHeight = 50.0;
 
-@interface TTGScrollViewContainer ()
+@interface TTGScrollViewContainer () <UITextFieldDelegate>
 
+@property (strong, nonatomic) IBOutlet UIView *mainContainer;
+@property (strong, nonatomic) IBOutlet UIScrollView *mainScrollView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *scrollContainerConstraint;
 @property (strong, nonatomic) IBOutlet UIView *contentContainer;
-@property (strong, nonatomic) UIViewController *currentChild;
-@property (strong, nonatomic) UITextField *currentField;
-@property (strong, nonatomic) NSArray <UITextField *>*fields;
-
+@property (strong, nonatomic) UITextField *activeField;
+@property (strong, nonatomic) NSArray <UITextField *>*allFields;
+@property (assign, nonatomic) BOOL toolbarEnabled;
+@property (strong, nonatomic) UIViewController <TTGKeyboardContainerEmbedable>*contentVC;
 - (IBAction)close:(id)sender;
+
+// Add navigation accessory view (multiple fields on screen case)
+- (void)setupTextFieldsToolbarAccessory:(NSArray *)fields;
 
 @end
 
@@ -37,31 +42,31 @@ static CGFloat const TTGAccessoryToolbarHeight = 50.0;
 #pragma mark - Setup
 
 // Designated setup method
-- (void)setupWithContentController:(UIViewController *)contentVC {
-    [self addChildController:contentVC];
-    self.currentChild = contentVC;
+- (void)setupWithContentController:(UIViewController <TTGKeyboardContainerEmbedable>*)contentVC withToolbar:(BOOL)addToolbar {
+    self.contentVC = contentVC;
+    self.toolbarEnabled = addToolbar;
+}
+
+- (void)setupWithContentVC:(UIViewController <TTGKeyboardContainerEmbedable>*)contentVC
+                    fields:(NSArray <UITextField *>*)fields
+            toolbarEnabled:(BOOL)toolbarEnabled {
+    self.contentVC = contentVC;
+    self.allFields = fields;
+    self.toolbarEnabled = toolbarEnabled;
 }
 
 // UI adjustments
 - (void)setupUI {
     [self setupScrollView];
-    [self setupChildVC];
+    [self addChildController:self.contentVC];
+    if (self.toolbarEnabled) {
+        [self setupTextFieldsToolbarAccessory:self.contentVC.allTextFields];
+    }
 }
 
 - (void)setupScrollView {
     // This is needed to have a small gaps when keyboard appears and scrolls text field to visible
     self.mainScrollView.contentInset = UIEdgeInsetsMake(TTGTopTextFieldGap, 0, TTGBottomTextFieldGap, 0);
-}
-
-- (void)setupChildVC {
-    if (self.currentChild) {
-        return;
-    }
-    UIStoryboard *story = [UIStoryboard storyboardWithName:@"ViewContainers" bundle:nil];
-    ContentViewController *childVC = [story instantiateViewControllerWithIdentifier:@"ContentViewController"];
-    [self addChildController:childVC];
-    childVC.parentContainer = self;
-    self.currentChild = childVC;
 }
 
 #pragma mark - Child Controller
@@ -86,9 +91,10 @@ static CGFloat const TTGAccessoryToolbarHeight = 50.0;
 - (void)setupTextFieldsToolbarAccessory:(NSArray *)fields {
     UIView *toolbarView = [self createToolbar];
     for (UITextField *field in fields) {
+        field.delegate = self;
         field.inputAccessoryView = toolbarView;
     }
-    self.fields = fields;
+    self.allFields = fields;
 }
 
 - (UIToolbar *)createToolbar {
@@ -114,37 +120,37 @@ static CGFloat const TTGAccessoryToolbarHeight = 50.0;
 }
 
 - (void)previousField {
-    if (!self.currentField) {
+    if (!self.activeField) {
         return;
     }
-    NSUInteger idx = [self.fields indexOfObject:self.currentField] - 1;
+    NSUInteger idx = [self.allFields indexOfObject:self.activeField] - 1;
     if (idx == NSNotFound || idx == NSUIntegerMax) {
         return;
     }
     
-    UITextField *previous = self.fields[idx];
+    UITextField *previous = self.allFields[idx];
     [previous becomeFirstResponder];
 }
 
 - (void)nextField {
-    if (!self.currentField) {
+    if (!self.activeField) {
         return;
     }
-    NSUInteger idx = [self.fields indexOfObject:self.currentField] + 1;
-    if (idx >= self.fields.count) {
+    NSUInteger idx = [self.allFields indexOfObject:self.activeField] + 1;
+    if (idx >= self.allFields.count) {
         return;
     }
-    UITextField *next = self.fields[idx];
+    UITextField *next = self.allFields[idx];
     [next becomeFirstResponder];
 }
 
 - (void)activateField:(UITextField *)textField {
-    self.currentField = textField;
+    self.activeField = textField;
     [textField becomeFirstResponder];
 }
 
 - (void)deactivateField:(UITextField *)textField {
-    self.currentField = nil;
+    self.activeField = nil;
     [textField resignFirstResponder];
 }
 
@@ -180,7 +186,7 @@ static CGFloat const TTGAccessoryToolbarHeight = 50.0;
 }
 
 - (void)keyboardDidAppear:(NSNotification *)notification {
-    [self.mainScrollView scrollRectToVisible:self.currentField.frame animated:YES];
+    [self.mainScrollView scrollRectToVisible:self.activeField.frame animated:YES];
 }
 
 - (void)keyboardWillDisappear:(NSNotification *)notification {
@@ -195,18 +201,14 @@ static CGFloat const TTGAccessoryToolbarHeight = 50.0;
     } completion:nil];
 }
 
-#pragma mark - Actions
-
-- (void)resignActiveField {
-    [self.currentField resignFirstResponder];
-}
+#pragma mark - Dismiss container
 
 - (IBAction)close:(id)sender {
     [self dismissWithCompletion:nil];
 }
 
 - (void)dismissWithCompletion:(void(^)(void))completion {
-    [self.currentField resignFirstResponder];
+    [self.activeField resignFirstResponder];
     [self dismissViewControllerAnimated:YES completion:completion];
 }
 
@@ -223,6 +225,75 @@ static CGFloat const TTGAccessoryToolbarHeight = 50.0;
                                                                           views:bindings];
         [NSLayoutConstraint activateConstraints:constraints];
     }
+}
+
+#pragma mark - UITextFieldDelegate Wrapper
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    if ([self.contentVC respondsToSelector:@selector(container:textFieldShouldBeginEditing:)]) {
+        return [self.contentVC container:self textFieldShouldBeginEditing:textField];
+    }
+    
+    return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    [self activateField:textField];
+    if ([self.contentVC respondsToSelector:@selector(container:textFieldShouldBeginEditing:)]) {
+        [self.contentVC container:self textFieldDidBeginEditing:textField];
+    }
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    if ([self.contentVC respondsToSelector:@selector(container:textFieldShouldBeginEditing:)]) {
+        return [self.contentVC container:self textFieldShouldEndEditing:textField];
+    }
+    
+    return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [self deactivateField:textField];
+    if ([self.contentVC respondsToSelector:@selector(container:textFieldShouldBeginEditing:)]) {
+        [self.contentVC container:self textFieldDidEndEditing:textField];
+    }
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField reason:(UITextFieldDidEndEditingReason)reason {
+    [self deactivateField:textField];
+    if ([self.contentVC respondsToSelector:@selector(container:textFieldShouldBeginEditing:)]) {
+        [self.contentVC container:self textFieldDidEndEditing:textField reason:reason];
+    }
+}
+
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if ([self.contentVC respondsToSelector:@selector(container:textFieldShouldBeginEditing:)]) {
+        return [self.contentVC container:self textField:textField shouldChangeCharactersInRange:range replacementString:string];
+    }
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    if ([self.contentVC respondsToSelector:@selector(container:textFieldShouldBeginEditing:)]) {
+        return [self.contentVC container:self textFieldShouldClear:textField];
+    }
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    BOOL shouldReturn = YES;
+    if ([self.contentVC respondsToSelector:@selector(container:textFieldShouldBeginEditing:)]) {
+        shouldReturn = [self.contentVC container:self textFieldShouldReturn:textField];
+    }
+    
+    if (shouldReturn) {
+        [self deactivateField:textField];
+    }
+    
+    return shouldReturn;
 }
 
 @end

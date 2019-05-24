@@ -7,8 +7,10 @@
 #import <UIKit/UIKit.h>
 #import "TTGScrollViewContainer.h"
 
-@interface ContentViewController : UIViewController
+@interface ContentViewController : UIViewController <TTGKeyboardContainerEmbedable>
 
-@property (weak, nonatomic) TTGScrollViewContainer *parentContainer;
+// This is the only thing that is needed for the text fields toolbar to work
+@property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *allFields;
+
 
 @end

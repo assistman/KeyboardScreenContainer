@@ -5,6 +5,7 @@
 //
 
 #import "ViewController.h"
+#import "ContentViewController.h"
 
 @interface ViewController ()
 
@@ -21,8 +22,13 @@
 
 - (void)openScrollViewContainer {
     UIStoryboard *story = [UIStoryboard storyboardWithName:@"ViewContainers" bundle:nil];
+    ContentViewController *contentVC = [story instantiateViewControllerWithIdentifier:@"ContentViewController"];
     UINavigationController *nav = [story instantiateInitialViewController];
     self.containerVC = (TTGScrollViewContainer *)nav.topViewController;
+    
+    // All you need to setup container is the following:
+    [contentVC loadViewIfNeeded];
+    [self.containerVC setupWithContentVC:contentVC fields:contentVC.allFields toolbarEnabled:YES];
     [self presentViewController:nav animated:YES completion:nil];
 }
 

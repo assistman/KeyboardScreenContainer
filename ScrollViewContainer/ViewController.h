@@ -10,6 +10,7 @@
 @interface ViewController : UIViewController
 
 @property (strong, nonatomic) TTGScrollViewContainer *containerVC;
+
 - (void)openScrollViewContainer;
 
 @end
