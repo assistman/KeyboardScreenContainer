@@ -10,6 +10,21 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--View Controller-->
+        <scene sceneID="gje-yM-Cwy">
+            <objects>
+                <viewController id="f74-27-k4x" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1A2-sr-omB">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="RfI-0t-fIh"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PWN-qq-UjD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2404" y="2390"/>
+        </scene>
         <!--Scroll View Container-->
         <scene sceneID="bMm-yL-c5i">
             <objects>
@@ -29,9 +44,6 @@
                                                 <subviews>
                                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gk1-Yj-o1A">
                                                         <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
-                                                        <connections>
-                                                            <segue destination="BuY-8g-dpm" kind="embed" id="mlO-Bd-RM8"/>
-                                                        </connections>
                                                     </containerView>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

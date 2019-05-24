@@ -184,7 +184,15 @@ static CGFloat const TTGAccessoryToolbarHeight = 50.0;
 }
 
 - (void)keyboardWillDisappear:(NSNotification *)notification {
+    [self.view layoutIfNeeded];
+    UIViewAnimationOptions animationOptions = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    CGFloat animationDuration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     self.scrollContainerConstraint.constant = 0;
+    typeof(self) __weak weakSelf = self;
+    [UIView animateWithDuration:animationDuration delay:0 options:animationOptions animations:^{
+        [weakSelf.view setNeedsLayout];
+        [weakSelf.view layoutIfNeeded];
+    } completion:nil];
 }
 
 #pragma mark - Actions

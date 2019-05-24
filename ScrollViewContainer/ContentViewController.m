@@ -32,6 +32,7 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self.parentContainer deactivateField:textField];
     return YES;
 }
 
